@@ -5,19 +5,25 @@ import "react-phone-number-input/style.css";
 import { AuthContext } from "../../context/AuthContext";
 import TextField from "@mui/material/TextField";
 import { updateProfile } from "firebase/auth";
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 const SignUp = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const { signup } = useContext(AuthContext);
 
   const handleSubmitSignUp = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
+
+    const date = new Date();
+    const nowDate = date.getHours() + ":" + date.getMinutes();
 
     setError("");
     try {
@@ -25,13 +31,25 @@ const SignUp = () => {
         setError("Please fill all fields");
       } else {
         setError("");
-        await signup(email, password, username);
+        const res = await signup(email, password);
+
+        await setDoc(doc(db, "contacts", res.user.uid), {
+          uid: res.user.uid,
+          username,
+          date: nowDate,
+        });
+
+        await setDoc(doc(db, "userChats", res.user.uid), {
+          allTexts: [],
+        });
+
         await updateProfile(auth.currentUser, {
           displayName: username,
         });
         navigate("/");
       }
     } catch (err) {
+      setIsLoading(false);
       setError(err.message);
     }
   };
@@ -86,7 +104,7 @@ const SignUp = () => {
               size="medium"
               className="login_btn"
             >
-              Sign up
+              {isLoading ? "Loading..." : "Sign up"}
             </Button>
             <div className="form_bottom">
               <p>Already have an account?</p>

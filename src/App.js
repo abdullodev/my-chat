@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import Home from "./pages/home/Home";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthContext } from "./context/AuthContext";
-import Loading from "./components/Loading";
 import SignIn from "./pages/login/SignIn";
 import SignUp from "./pages/login/SignUp";
 
@@ -31,7 +30,6 @@ function App() {
           />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
-          <Route path="loading" element={<Loading />} />
         </Route>
       </Routes>
     </BrowserRouter>

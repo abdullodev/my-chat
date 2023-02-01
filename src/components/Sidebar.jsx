@@ -9,19 +9,20 @@ import { HiOutlineSave } from "react-icons/hi";
 import { IoIosSettings } from "react-icons/io";
 import { MdNightlightRound } from "react-icons/md";
 import { RiLogoutCircleRLine } from "react-icons/ri";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
 import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import { doc, updateDoc } from "firebase/firestore";
 
 const Sidebar = ({ isEdit, setIsEdit, setIsMenu }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [sidebar, setSidebar] = useState(false);
   const [username, setUsername] = useState("");
 
-  const { user, editContact } = useContext(AuthContext);
+  const { user, editContact, logout } = useContext(AuthContext);
 
   const editUsernameHandle = () => {
     setIsEdit(true);
@@ -30,16 +31,23 @@ const Sidebar = ({ isEdit, setIsEdit, setIsMenu }) => {
   };
 
   const editHandle = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     try {
-      if (username !== user.displayName) {
+      if (username !== user.displayName && username !== "") {
         await editContact(username);
+        await updateDoc(doc(db, "contacts", auth.currentUser.uid), {
+          username,
+        });
         setIsEdit(false);
+        setIsLoading(false);
       } else {
         alert("You didnt change your username");
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -54,51 +62,67 @@ const Sidebar = ({ isEdit, setIsEdit, setIsMenu }) => {
       </div>
       <div className="sidebar_content">
         <div className="sidebar_header_hidden">
-          <div className="siderbar_user_box">
+          <Button variant="outlined" className="siderbar_user_box">
             <div className="user_img_box"></div>
             <div>{user.displayName}</div>
-          </div>
+          </Button>
 
-          <div className="siderbar_user_box">
+          <Button variant="outlined" className="siderbar_user_box">
             <IoAddCircleSharp className="icon" />
             <div>Add account</div>
-          </div>
+          </Button>
         </div>
 
         <div className={sidebar ? "sidebar_nav active" : "sidebar_nav"}>
           <ul>
             <li onClick={() => setIsMenu(false)}>
-              <FiUsers className="icon" />
-              <div>New Group</div>
+              <Button variant="outlined" className="sidebar_nav_btn">
+                <FiUsers className="icon" />
+                <div>New Group</div>
+              </Button>
             </li>
             <li onClick={() => setIsMenu(false)}>
-              <AiFillFolder className="icon" />
-              <div>New Channel</div>
+              <Button variant="outlined" className="sidebar_nav_btn">
+                <AiFillFolder className="icon" />
+                <div>New Channel</div>
+              </Button>
             </li>
             <li onClick={editUsernameHandle}>
-              <FiUser className="icon" />
-              <div>Edit Username</div>
+              <Button variant="outlined" className="sidebar_nav_btn">
+                <FiUser className="icon" />
+                <div>Edit Username</div>
+              </Button>
             </li>
             <li onClick={() => setIsMenu(false)}>
-              <IoMdCall className="icon" />
-              <div>Calls</div>
+              <Button variant="outlined" className="sidebar_nav_btn">
+                <IoMdCall className="icon" />
+                <div>Calls</div>
+              </Button>
             </li>
             <li>
-              <HiOutlineSave className="icon" />
-              <div>Saved Messages</div>
+              <Button variant="outlined" className="sidebar_nav_btn">
+                <HiOutlineSave className="icon" />
+                <div>Saved Messages</div>
+              </Button>
             </li>
             <li onClick={() => setIsMenu(false)}>
-              <IoIosSettings className="icon" />
-              <div>Settings</div>
+              <Button variant="outlined" className="sidebar_nav_btn">
+                <IoIosSettings className="icon" />
+                <div>Settings</div>
+              </Button>
             </li>
             <li onClick={() => setIsMenu(false)}>
-              <MdNightlightRound className="icon" />
-              <div>Night Mode</div>
+              <Button variant="outlined" className="sidebar_nav_btn">
+                <MdNightlightRound className="icon" />
+                <div>Night Mode</div>
+              </Button>
             </li>
 
-            <li onClick={() => signOut(auth)}>
-              <RiLogoutCircleRLine className="icon" />
-              <div>Logout</div>
+            <li onClick={() => logout()}>
+              <Button variant="outlined" className="sidebar_nav_btn">
+                <RiLogoutCircleRLine className="icon" />
+                <div>Logout</div>
+              </Button>
             </li>
           </ul>
           <div className="sidebar_bottom">
@@ -132,7 +156,7 @@ const Sidebar = ({ isEdit, setIsEdit, setIsMenu }) => {
               onChange={(e) => setUsername(e.target.value)}
             />
             <Button type="submit" className="un_edit_btn">
-              Edit
+              {!isLoading ? "Edit" : "Loading..."}
             </Button>
           </form>
         </div>

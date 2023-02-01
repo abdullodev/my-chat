@@ -5,6 +5,7 @@ import {
   onAuthStateChanged,
   updateProfile,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 
 export const AuthContext = createContext();
@@ -12,11 +13,15 @@ export const AuthContext = createContext();
 const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
 
-  const signup = (email, password, username) => {
+  const signup = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
   const signin = async (email, password) => {
     return signInWithEmailAndPassword(auth, email, password);
+  };
+
+  const logout = () => {
+    return signOut(auth);
   };
 
   const editContact = (name) => {
@@ -36,7 +41,15 @@ const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, signup, signin, editContact }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        signup,
+        signin,
+        logout,
+        editContact,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

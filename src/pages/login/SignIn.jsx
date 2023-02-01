@@ -6,7 +6,8 @@ import { AuthContext } from "../../context/AuthContext";
 import TextField from "@mui/material/TextField";
 
 const SignIn = () => {
-  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const SignIn = () => {
   const { signin } = useContext(AuthContext);
 
   const handleSubmitLogin = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
 
     try {
@@ -22,9 +24,11 @@ const SignIn = () => {
       } else {
         setError("");
         await signin(email, password);
+
         navigate("/");
       }
     } catch (err) {
+      setIsLoading(false);
       setError(err.message);
       console.log(err.message);
     }
@@ -34,7 +38,7 @@ const SignIn = () => {
     <div className="form_container">
       <div className="form_box signin">
         <div className="form_title">
-          <h3>Log in</h3>
+          <h3>Sign in</h3>
           {error && <p className="err_login">{error}</p>}
         </div>
 
@@ -68,7 +72,7 @@ const SignIn = () => {
               size="medium"
               className="login_btn"
             >
-              Log in
+              {!isLoading ? "Sign in" : "Loading..."}
             </Button>
 
             <div className="form_bottom">

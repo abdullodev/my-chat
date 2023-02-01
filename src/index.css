@@ -49,9 +49,9 @@ li {
   align-items: center;
 }
 .form_container .form_box {
-  width: 420px;
+  min-width: 420px;
   min-height: 240px;
-  padding: 2rem 0;
+  padding: 2rem 0.5rem;
   background-color: var(--bg-1);
   display: grid;
   grid-template-columns: 0.8fr;
@@ -135,6 +135,7 @@ li {
   width: 100%;
   height: 50px;
   font-size: 0.95rem;
+  color: var(--text-color-1);
 }
 .btn_box .form_bottom {
   display: flex;
@@ -180,6 +181,7 @@ li {
 .sidebar_back {
   position: fixed;
   top: 0;
+  z-index: 11;
   left: 0;
   width: 100%;
   height: 100%;
@@ -196,6 +198,7 @@ li {
   top: 0;
   left: -275px;
   width: 275px;
+  z-index: 12;
   height: 100%;
   background-color: var(--bg-1);
   transition: 0.3s ease-in-out;
@@ -305,6 +308,9 @@ li {
   align-items: center;
   transition: 0.2s;
   cursor: pointer;
+  border: none !important;
+  outline: none !important;
+  text-transform: inherit;
 }
 .siderbar_user_box:hover {
   background-color: var(--bg-och);
@@ -313,11 +319,12 @@ li {
   height: 35px;
   width: 35px;
   border-radius: 50%;
-  background-color: #0060fa;
+  background-color: var(--color-1);
 }
 .siderbar_user_box div {
   color: var(--text-color-1);
   font-size: 0.9rem;
+  text-align: left;
 }
 .siderbar_user_box .icon {
   color: var(--color-1);
@@ -340,25 +347,33 @@ li {
   top: 110px;
 }
 .sidebar_nav ul li {
-  padding-left: 1.5rem;
   height: 43px;
   width: 100%;
   transition: 0.2s;
+  font-size: 0.9rem;
+}
+.sidebar_nav ul li:hover {
+  background-color: var(--bg-och);
+}
+.sidebar_nav ul li .sidebar_nav_btn {
+  width: 100%;
+  height: 100%;
+  outline: none !important;
+  border: none !important;
   cursor: pointer;
   display: grid;
   grid-template-columns: 0.4fr 1.6fr;
   justify-content: flex-start;
   align-items: center;
-  font-size: 0.9rem;
-}
-.sidebar_nav ul li:hover {
-  background-color: var(--bg-och);
+  text-transform: inherit;
+  padding-left: 1.5rem;
 }
 .sidebar_nav ul li .icon {
   color: var(--color-1);
   font-size: 1.6rem;
 }
 .sidebar_nav ul li div {
+  text-align: left;
   color: var(--text-color-1);
   font-size: 0.9rem;
 }
@@ -450,8 +465,6 @@ li {
 }
 .menu_icons {
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
 }
 .menu_icons .menu_icon {
@@ -470,16 +483,28 @@ li {
 .menu_icon:hover {
   background-color: var(--bg-och);
 }
-.menu_icon .icon {
+.menu_icon .icon_box {
+  width: 100%;
   font-size: 1.6rem;
   color: var(--text-color-1);
+  display: flex;
+  margin: 0;
+  border-radius: 0px !important;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 .menu_icon .menu_title {
   font-size: 0.75rem;
+  text-transform: capitalize;
   color: var(--text-color-1);
 }
-.menu .icon {
+.menu {
+  height: 55px !important;
+}
+.menu .realy_menu_icon {
   font-size: 1.8rem;
+  height: 100% !important;
 }
 .menu_first .icon {
   font-size: 2.2rem;
@@ -493,9 +518,10 @@ li {
 .chat_header {
   background-color: var(--bg-1);
   display: grid;
-  grid-template-columns: 1.6fr 0.4fr;
+  grid-template-columns: 1.7fr 0.3fr;
   justify-content: center;
   align-items: center;
+  gap: 0.2rem;
 }
 .chat_header .chat_search_input {
   width: 100%;
@@ -523,9 +549,15 @@ li {
   justify-content: center;
   align-items: center;
 }
-.chat_lock_icon .icon {
+.chat_lock_icon .icon_box {
+  color: var(--text-color-1) !important;
+  cursor: pointer;
+  border-radius: 0px;
+  width: 100%;
+  height: 100%;
+}
+.chat_lock_icon .icon_box .icon {
   font-size: 1.5rem;
-  color: var(--text-color-1);
 }
 .chat_content {
   max-height: calc(100vh - var(--height));
@@ -545,41 +577,52 @@ li {
 }
 
 .chat_content .chat {
+  width: 100%;
   height: var(--height);
   display: grid;
-  grid-template-columns: 0.4fr 1.2fr 0.4fr;
   background-color: var(--bg-1);
-  justify-content: center;
+  grid-template-columns: 0.5fr 1fr 0.5fr;
+  justify-content: space-between;
+  gap: 0.5rem;
   align-items: center;
   transition: 0.2s;
   cursor: pointer;
+  text-transform: inherit;
+  outline: none !important ;
+  border: none !important;
 }
 .chat_content .chat:hover {
   background-color: var(--bg-och);
 }
 .chat .chat_img {
   height: 100%;
+  width: 100%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  /* background-color: #0060fa; */
+  margin: 0 !important;
+  padding: 0 !important;
 }
-.chat_img img {
+.chat_img .img {
   width: 45px;
-  object-fit: cover;
   height: 45px;
+  background-color: var(--color-1-a);
   border-radius: 50%;
-  margin-left: 1rem;
 }
 .chat .chat_username {
-  font-size: 0.95rem;
-  color: var(--text-color-1);
+  font-size: 1rem;
+  color: var(--text-color-2);
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
 }
 .chat .chat_time {
+  width: 100%;
   height: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   color: var(--text-color-1);
   font-size: 0.9em;
@@ -588,11 +631,35 @@ li {
 }
 
 .messages_container {
+  position: relative;
   background-color: var(--bg-bold);
   display: grid;
   grid-template-rows: var(--height) calc(100vh - 2 * (var(--height))) var(
       --height
     );
+}
+.default_message_box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0.5rem 1rem;
+  border-radius: 15px;
+  background-color: var(--bg-och);
+  color: var(--text-color-2);
+  font-size: 1rem;
+}
+.no_message_in_chat {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0.5rem 1rem;
+  border-radius: 15px;
+  background-color: var(--bg-och);
+  color: var(--text-color-2);
+  font-size: 3.5rem;
+  cursor: pointer;
 }
 .message_header {
   display: grid;
@@ -620,6 +687,7 @@ li {
   justify-content: center;
   align-items: center;
   margin-right: 0.5rem;
+  border-radius: 0px;
 }
 .message_icon_box:hover .icon {
   color: var(--text-color-2);
@@ -680,12 +748,14 @@ li {
 .message_content .message {
   max-width: 500px;
   margin: 0.8rem;
-  padding: 1rem 0.5rem;
+  margin-top: 0px;
+  padding: 0.7rem 0.8rem;
   display: grid;
-  grid-template-columns: 60px 1.5fr;
+  grid-template-columns: 60px 1fr;
   justify-content: center;
   align-items: center;
-  border-radius: 8px;
+  border-radius: 25px;
+  border-bottom-right-radius: 0px;
   background-color: var(--bg-1);
   object-fit: cover;
 }
@@ -695,24 +765,24 @@ li {
   justify-content: center;
   align-items: center;
 }
-.message_action .icon {
+.message_action .message_icon_box .icon {
   font-size: 1.3rem;
-  margin: 0.2rem;
   color: var(--text-color-1);
 }
-.message_action .icon:hover {
+.message_action .message_icon_box .icon:hover {
   color: var(--text-color-2);
 }
-.message_action .icon:nth-child(2) {
+.message_action .message_icon_box .icon_m_delete {
   color: var(--delete-och);
 }
-.message_action .icon:nth-child(2):hover {
-  color: var(--delete-toq);
+.message_action .message_icon_box .icon_m_delete:hover {
+  color: var(--delete-toq) !important;
 }
 .message .message_text {
   padding: 0 0.8rem;
   color: var(--text-color-1);
   font-size: 0.9rem;
+  text-align: left;
 }
 .message_input_icons .send_icon {
   color: #0060fa;
@@ -721,50 +791,14 @@ li {
   color: #033dce !important;
 }
 
-/* loading */
-
-.loading_container {
+.loading {
+  min-height: 100px;
   width: 100%;
-  height: 100vh;
-  position: fixed;
-  z-index: 99;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(253, 253, 253, 0.6);
-}
-.loading_container .loading {
-  width: 120px;
-  min-height: 14%;
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: 1fr 1fr 1fr;
-  justify-content: center;
-  padding: 1rem;
 }
 .loading .loading_box {
-  width: 20px;
-  height: 100%;
-  background-color: var(--delete-och);
-}
-.loading .load1 {
-  animation: load 0.7s 0.2s ease-in infinite;
-}
-
-.loading .load2 {
-  animation: load 0.7s 0.35s ease-in infinite;
-}
-.loading .load3 {
-  animation: load 0.7s 0.5s ease-in infinite;
-}
-@keyframes load {
-  0% {
-    transform: scaleY(1);
-  }
-  50% {
-    transform: scaleY(0.5);
-  }
-  100% {
-    transform: scaleY(1);
-  }
+  width: 40px;
+  color: var(--color-1);
 }

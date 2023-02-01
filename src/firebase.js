@@ -3,19 +3,16 @@ import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
 
-// Create a root reference
 const firebaseConfig = {
-  apiKey: "AIzaSyCZkwCPt96LzDwBe3QESPwFOhr9o2VoqZ8",
-  authDomain: "tgram-38811.firebaseapp.com",
-  projectId: "tgram-38811",
-  storageBucket: "tgram-38811.appspot.com",
-  messagingSenderId: "515307269031",
-  appId: "1:515307269031:web:438aa4c7ab963be9f62482",
+  apiKey: "AIzaSyBHCGAVm8_9KSj1vJQOHjJlBlex-h6F3SY",
+  authDomain: "chat-354f8.firebaseapp.com",
+  projectId: "chat-354f8",
+  storageBucket: "chat-354f8.appspot.com",
+  messagingSenderId: "667178840506",
+  appId: "1:667178840506:web:ea2c41f2ff3aaeb847ed83",
 };
 
-// Initialize Firebase
-
-export const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
 export const storage = getStorage();
 export const db = getFirestore();

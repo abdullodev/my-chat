@@ -1,47 +1,95 @@
-import React from "react";
-import { IoIosMenu } from "react-icons/io";
-import { AiOutlineWechat } from "react-icons/ai";
-import { TbFolder } from "react-icons/tb";
-import { MdOutlineEditRoad } from "react-icons/md";
-import { HiOutlineLockOpen } from "react-icons/hi";
+import React, { useEffect, useState } from "react";
+import Chat from "./Chat";
+import Loading from "./Loading";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from "@mui/icons-material/Menu";
+import MessageIcon from "@mui/icons-material/Message";
+import FolderSpecialIcon from "@mui/icons-material/FolderSpecial";
+import GroupIcon from "@mui/icons-material/Group";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
+import { collection, getDocs } from "firebase/firestore";
+import { auth, db } from "../firebase";
+import { Button } from "@mui/material";
 
-const Chats = ({ setIsMenu }) => {
+const Chats = ({ setIsMenu, getOneUser }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [users, setUsers] = useState([]);
+
+  async function getUser() {
+    const data = [];
+
+    try {
+      setIsLoading(true);
+      const querySnapshot = await getDocs(collection(db, "contacts"));
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+        let allData = data.filter((d) => d.uid !== auth.currentUser.uid);
+        setUsers(allData);
+      });
+    } catch (err) {
+      console.log(err.message);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    getUser();
+  }, []);
   return (
     <>
       <div className="chat_menu_container">
         <div className="menu_icons">
-          <div className="menu_icon menu" onClick={() => setIsMenu(true)}>
-            <IoIosMenu className="icon" />
+          <div className="menu_icon menu">
+            <Button className="icon_box" onClick={() => setIsMenu(true)}>
+              <MenuIcon className="realy_menu_icon" />
+            </Button>
           </div>
 
           <div className="menu_icon menu_first">
-            <AiOutlineWechat className="icon" />
-            <div className="menu_title">Chats</div>
+            <Button className="icon_box">
+              <MessageIcon />
+              <div className="menu_title">Chats</div>
+            </Button>
           </div>
 
           <div className="menu_icon">
-            <TbFolder className="icon" />
-            <div className="menu_title">Channel</div>
+            <Button className="icon_box">
+              <FolderSpecialIcon />
+              <div className="menu_title">Channel</div>
+            </Button>
           </div>
 
           <div className="menu_icon">
-            <TbFolder className="icon" />
-            <div className="menu_title">Group</div>
+            <Button className="icon_box">
+              <GroupIcon />
+              <div className="menu_title">Group</div>
+            </Button>
           </div>
 
           <div className="menu_icon">
-            <TbFolder className="icon" />
-            <div className="menu_title">User</div>
+            <Button className="icon_box">
+              <PersonOutlineIcon />
+              <div className="menu_title">User</div>
+            </Button>
           </div>
 
           <div className="menu_icon">
-            <TbFolder className="icon" />
-            <div className="menu_title">Bot</div>
+            <Button className="icon_box">
+              <SmartToyIcon />
+              <div className="menu_title">Bot</div>
+            </Button>
           </div>
 
           <div className="menu_icon">
-            <MdOutlineEditRoad className="icon" />
-            <div className="menu_title">Edit</div>
+            <Button className="icon_box">
+              <BorderColorIcon />
+              <div className="menu_title">Edit</div>
+            </Button>
           </div>
         </div>
       </div>
@@ -51,44 +99,24 @@ const Chats = ({ setIsMenu }) => {
             <input type="text" placeholder="Search" />
           </div>
           <div className="chat_lock_icon">
-            <HiOutlineLockOpen className="icon" />
+            <IconButton
+              color="primary"
+              aria-label="add to shopping cart"
+              className="icon_box"
+            >
+              <LockOpenIcon />
+            </IconButton>
           </div>
         </div>
 
         <div className="chat_content">
-          <div className="chat">
-            <div className="chat_img">
-              <img
-                src="https://images.unsplash.com/photo-1480455624313-e29b44bbfde1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fG1hbGV8ZW58MHx8MHx8&w=1000&q=80"
-                alt="user"
-                height="40px"
-              />
-            </div>
-            <div className="chat_username">Abdullo</div>
-            <div className="chat_time">12:21</div>
-          </div>
-          <div className="chat">
-            <div className="chat_img">
-              <img
-                src="https://images.pexels.com/photos/842811/pexels-photo-842811.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                alt="user"
-                height="40px"
-              />
-            </div>
-            <div className="chat_username">Mansur</div>
-            <div className="chat_time">12:21</div>
-          </div>
-          <div className="chat">
-            <div className="chat_img">
-              <img
-                src="https://cdn.wallpapersafari.com/62/44/CRVXEL.jpg"
-                alt="user"
-                height="40px"
-              />
-            </div>
-            <div className="chat_username">Dilshod</div>
-            <div className="chat_time">12:21</div>
-          </div>
+          {!isLoading ? (
+            users.map((user, index) => (
+              <Chat key={index} user={user} getOneUser={getOneUser} />
+            ))
+          ) : (
+            <Loading />
+          )}
         </div>
       </div>
     </>
