@@ -66,7 +66,7 @@ const Messages = ({
         }
       } else {
         let edited = Object.values(allTexts)[0].map((a) => {
-          if (a.id === editedItem.id) {
+          if (a.id === editedItem) {
             a.text = message;
 
             return a;
@@ -143,7 +143,7 @@ const Messages = ({
     let elem = item.text;
     setMessage(elem);
     setIsEdit(true);
-    setEditedItem(elem);
+    setEditedItem(item.id);
   };
 
   const getChat = () => {
