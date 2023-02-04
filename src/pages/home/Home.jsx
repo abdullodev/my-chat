@@ -1,18 +1,22 @@
-import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import React, { useState } from "react";
+import { doc, getDoc } from "firebase/firestore";
 import Chats from "../../components/Chats";
 import Messages from "../../components/Messages";
 import Sidebar from "../../components/Sidebar";
-import { auth, db } from "../../firebase";
+import { db } from "../../firebase";
 
 const Home = () => {
   const [oneUser, setOneUser] = useState(null);
   const [chatId, setChatId] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [isMenu, setIsMenu] = useState(false);
+  const [isClear, setIsClear] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
+  const [message, setMessage] = useState("");
 
   const getOneUser = async (id) => {
     setChatId(id);
+    setMessage("");
     const valueOfselected = doc(db, "contacts", id);
 
     const user = await getDoc(valueOfselected);
@@ -27,7 +31,11 @@ const Home = () => {
   return (
     <div className="home">
       <div
-        className={isMenu || isEdit ? "sidebar_back active" : "sidebar_back"}
+        className={
+          isMenu || isEdit || isClear || isDelete
+            ? "sidebar_back active"
+            : "sidebar_back"
+        }
         onClick={() => setIsMenu(false)}
       ></div>
       <div className="home_container">
@@ -40,12 +48,23 @@ const Home = () => {
             setIsMenu={setIsMenu}
           />
         </div>
+
         <div className="chats_container">
           <Chats setIsMenu={setIsMenu} getOneUser={getOneUser} />
         </div>
+
         <div className="messages_container">
           {oneUser !== null ? (
-            <Messages oneUser={oneUser} chatId={chatId} />
+            <Messages
+              oneUser={oneUser}
+              chatId={chatId}
+              isClear={isClear}
+              setIsClear={setIsClear}
+              isDelete={isDelete}
+              setIsDelete={setIsDelete}
+              message={message}
+              setMessage={setMessage}
+            />
           ) : (
             <div className="default_message_box">Select user for chatting</div>
           )}
